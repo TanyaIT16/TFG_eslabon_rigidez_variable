@@ -1,0 +1,1 @@
+# TFG_eslabon_rigidez_variable
