@@ -2,7 +2,7 @@
 
 // rostopic pub /Rele2 std_msgs/UInt8 "data: 0"
 
-
+// Para que funcione ros.h
 #undef ESP32
 #undef ESP8266
 #include <ros.h>  // Defino pines de uso
@@ -28,7 +28,7 @@ std_msgs::Float32 analog_msg;
 
 ros::Publisher analog_pub("sensor_vacio", &analog_msg);
 
-
+// Callback para controlar el primer relé
 void messageCbRele1(const std_msgs::UInt8& msg) {
   
   uint8_t received_value = msg.data;
@@ -76,7 +76,7 @@ void setup() {
   // Para asegurar que la velocidad en baudios en el código de Arduino y rosserial coinciden
   nh.getHardware()->setBaud(57600);
 
-  // Inicializo los pines de los relés como salida
+  // Inicialización los pines de los relés como salida
   pinMode(sensor,INPUT);
   pinMode(rele1, OUTPUT);
   pinMode(rele2, OUTPUT);
@@ -97,11 +97,12 @@ void setup() {
 void loop() {
 unsigned long currentMicros = micros();
 
-  // Ejecutar solo si ha pasado el intervalo de 
+  // Ejecutar solo si ha pasado el intervalo de tiempo
   if (currentMicros - previousMicros >= interval) {
     previousMicros = currentMicros;
 
-    // Tu código aquí
+    // Leer el valor del sensor analógico
+    // Convertir el valor del ADC a presión (en bar)
     int adc = analogRead(sensor);
     float presion = 0.000657 * adc -1.5049;
 

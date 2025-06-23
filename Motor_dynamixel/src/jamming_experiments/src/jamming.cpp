@@ -71,30 +71,38 @@ int main(int argc, char *argv[]) {
     J1.setGoalVelocity(VELOCIDAD_ROTACION);
     ROS_INFO("Motor activado y en movimiento.");
 
+    // Publicadores para la posición y corriente del motor
     ros::Publisher motor_position_pub = nh.advertise<std_msgs::Float32>("motor_position", 10);
     ros::Publisher motor_current_pub = nh.advertise<std_msgs::Float32>("motor_current", 10);
 
     ros::Rate loop_rate(10); // 10 Hz
 
+    // Bucle principal
     while (ros::ok()) {
+
+        // Leer la posición y corriente del motor
         float posicion = J1.getPresentPosition();
         float corriente = J1.getPresentCurrent();
 
+        // Validar corriente
         if (corriente < 0 || corriente > 5000) {
             ROS_WARN("Corriente anómala detectada: %.2f mA. Ignorando lectura.", corriente);
             corriente = 0.0;
         }
 
+        // Publicar la posición
         std_msgs::Float32 posicion_msg;
         posicion_msg.data = posicion;
         motor_position_pub.publish(posicion_msg);
 
+        // Publicar la corriente
         std_msgs::Float32 current_msg;
         current_msg.data = corriente;
         motor_current_pub.publish(current_msg);
 
         ROS_INFO("Posicion: %.2f°, Corriente: %.2f mA", posicion, corriente);
 
+        // Comprobar límites y detener el motor si es necesario
         if (corriente >= LIMITE_CORRIENTE) {
             ROS_WARN("Límite de corriente alcanzado. Deteniendo motor.");
             J1.setTorqueState(false);

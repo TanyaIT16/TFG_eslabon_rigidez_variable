@@ -1,3 +1,4 @@
+// Para que funcione ros.h
 #undef ESP32
 #undef ESP8266
 #include "HX711.h"
