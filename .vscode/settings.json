@@ -1,0 +1,10 @@
+{
+    "cmake.sourceDirectory": "/home/tanya/TFG/src",
+    "files.associations": {
+        "array": "cpp",
+        "string": "cpp",
+        "string_view": "cpp",
+        "esp_flash.h": "c",
+        "fstream": "cpp"
+    }
+}
